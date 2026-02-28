@@ -1,4 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UserEntity } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { ClientsService } from '../clients/clients.service';
 
 @Injectable()
-export class UsersService {}
+export class UsersService {
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+
+    private readonly clientsService: ClientsService
+  ) {}
+
+  async create(dto: CreateUserDto) {
+    const client = await this.clientsService.findOne(dto.client_id); // já lança NotFoundException
+    const user = this.userRepository.create({ ...dto, client });
+    return this.userRepository.save(user);
+  }
+
+  async findAll() {
+    return this.userRepository.find({ relations: ['client'] });
+  }
+
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne({ where: { id }, relations: ['client'] });
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+    return user;
+  }
+
+  async update(id: number, dto: UpdateUserDto) {
+    const user = await this.findOne(id);
+
+    if (dto.client_id) {
+      const client = await this.clientsService.findOne(dto.client_id);
+      user.client = client;
+    }
+
+    const updated = this.userRepository.merge(user, dto);
+    return this.userRepository.save(updated);
+  }
+
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    return this.userRepository.remove(user);
+  }
+}
