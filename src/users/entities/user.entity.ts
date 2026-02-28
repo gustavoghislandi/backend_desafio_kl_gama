@@ -1,28 +1,39 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { ClientEntity } from '../../clients/entities/client.entity';
+import { DemandEntity } from '../../demands/entities/demand.entity';
 
 @Entity('users')
 export class UserEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number; // ID do usuário
 
   @Column({ length: 150 })
-  nome: string;
+  name: string; // nome do usuário
 
-  @Column({ length: 150, unique: true })
-  email: string;
+  @Column({ unique: true })
+  email: string; // e-mail do usuário
 
   @Column()
-  senha: string; // hash futuramente
+  password: string; // senha do usuário (hash)
 
   @Column({ default: true })
-  ativo: boolean;
+  active: boolean; // indica se está ativo
 
   @Column({ default: false })
-  gestor: boolean;
+  isManager: boolean; // indica se é gestor
 
-  @ManyToOne(() => ClientEntity)
-  @JoinColumn({ name: 'client_id' })
-  client: ClientEntity;
+  // Clientes que este usuário (ou gestor) pode gerenciar
+  @ManyToMany(() => ClientEntity, client => client.users)
+  @JoinTable({ name: 'user_clients' })
+  clients: ClientEntity[];
+
+  // Usuários que este gestor controla (incluindo ele mesmo)
+  @ManyToMany(() => UserEntity)
+  @JoinTable({ name: 'user_managed_users' })
+  managedUsers: UserEntity[];
+
+  // Demandas que este usuário é responsável
+  @OneToMany(() => DemandEntity, demand => demand.user)
+  demands: DemandEntity[];
 }

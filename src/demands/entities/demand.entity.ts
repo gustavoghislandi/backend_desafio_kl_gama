@@ -1,27 +1,29 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from '../../users/entities/user.entity';
 import { ClientEntity } from '../../clients/entities/client.entity';
 
-@Entity('demandas')
-export class DemandaEntity {
+@Entity('demands')
+export class DemandEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number; // ID da demanda
 
-  @Column({ length: 255 })
-  descricao: string;
+  @Column()
+  description: string; // descrição da demanda
 
-  @CreateDateColumn({ name: 'data_cadastro' })
-  dataCadastro: Date;
+  @Column()
+  createdAt: Date; // data de cadastro
 
-  @Column({ type: 'date', name: 'data_vencimento', nullable: true })
-  dataVencimento: Date;
+  @Column({ nullable: true })
+  dueDate?: Date; // data de vencimento
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: 'id_usuario' })
-  usuario: UserEntity;
+  // Usuário responsável pela demanda
+  @ManyToOne(() => UserEntity, user => user.demands, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'user_id' })
+  user: UserEntity;
 
-  @ManyToOne(() => ClientEntity)
-  @JoinColumn({ name: 'id_cliente' })
-  cliente: ClientEntity;
+  // Cliente ao qual a demanda pertence
+  @ManyToOne(() => ClientEntity, client => client.demands, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'client_id' })
+  client: ClientEntity;
 }

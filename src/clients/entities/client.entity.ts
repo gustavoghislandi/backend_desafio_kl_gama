@@ -1,15 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from 'typeorm';
+import { UserEntity } from '../../users/entities/user.entity';
+import { DemandEntity } from '../../demands/entities/demand.entity';
 
 @Entity('clients')
 export class ClientEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number; // ID do cliente
 
   @Column({ length: 150 })
-  nome: string;
+  name: string; // nome do cliente
 
   @Column({ default: true })
-  ativo: boolean;
+  active: boolean; // indica se está ativo
 
+  // Usuários que podem gerenciar este cliente
+  @ManyToMany(() => UserEntity, user => user.clients)
+  users: UserEntity[];
+
+  // Demandas deste cliente
+  @OneToMany(() => DemandEntity, demand => demand.client)
+  demands: DemandEntity[];
 }

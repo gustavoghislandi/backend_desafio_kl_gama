@@ -1,24 +1,28 @@
-import { IsBoolean, IsOptional, IsString, MaxLength, IsEmail, IsNumber } from 'class-validator';
+import { IsString, IsEmail, MaxLength, IsBoolean, IsOptional, IsArray, ArrayNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateUserDto {
+
   @IsString()
   @MaxLength(150)
-  nome: string;
+  name: string; // nome do usuário
 
   @IsEmail()
-  email: string;
+  email: string; // e-mail do usuário
 
   @IsString()
-  senha: string;
+  password: string; // senha do usuário (hash)
 
   @IsOptional()
   @IsBoolean()
-  ativo?: boolean;
+  active?: boolean; // indica se o usuário está ativo
 
   @IsOptional()
   @IsBoolean()
-  gestor?: boolean;
+  isManager?: boolean; // indica se o usuário é gestor
 
-  @IsNumber()
-  client_id: number;
+  @IsOptional()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsNumber({}, { each: true })
+  clients?: number[]; // IDs dos clientes vinculados
 }
