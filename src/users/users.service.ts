@@ -5,6 +5,7 @@ import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ClientsService } from '../clients/clients.service';
+import { handleTypeOrmError } from '../common/utils/typeorm-error.util'
 
 @Injectable()
 export class UsersService {
@@ -12,13 +13,18 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
 
-    private readonly clientsService: ClientsService
+    private readonly clientsService: ClientsService,
   ) {}
 
   async create(dto: CreateUserDto) {
-    const client = await this.clientsService.findOne(dto.client_id); // já lança NotFoundException
+    const client = await this.clientsService.findOne(dto.client_id);
     const user = this.userRepository.create({ ...dto, client });
-    return this.userRepository.save(user);
+
+    try {
+      return await this.userRepository.save(user);
+    } catch (error) {
+      handleTypeOrmError(error);
+    }
   }
 
   async findAll() {
@@ -40,7 +46,12 @@ export class UsersService {
     }
 
     const updated = this.userRepository.merge(user, dto);
-    return this.userRepository.save(updated);
+
+    try {
+      return await this.userRepository.save(updated);
+    } catch (error) {
+      handleTypeOrmError(error);
+    }
   }
 
   async remove(id: number) {
