@@ -1,3 +1,7 @@
+  - Escolhi usar o método 'remove' que é mais caro, mas garante integridade de dados (principalmente quando aumentar a complexidade do código), regras de négocio, etc. Se não houver necessidade, usar 'delete', que tem melhor performance.
+
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
