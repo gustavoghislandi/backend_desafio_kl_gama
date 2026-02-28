@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClientEntity } from './entities/client.entity';
+import { CreateClientDto } from './dto/create-client.dto';
+import { UpdateClientDto } from './dto/update-client.dto';
 
 @Injectable()
 export class ClientsService {
@@ -11,8 +13,8 @@ export class ClientsService {
     private readonly clientRepository: Repository<ClientEntity>,
   ) {}
 
-  async create(nome: string) {
-    const client = this.clientRepository.create({ nome });
+  async create(dto: CreateClientDto) {
+    const client = this.clientRepository.create(dto);
     return await this.clientRepository.save(client);
   }
 
@@ -30,13 +32,13 @@ export class ClientsService {
     return client;
   }
 
-  async update(id: number, nome: string) {
-    const client = await this.findOne(id);
+  async update(id: number, dto: UpdateClientDto) {
+  const client = await this.findOne(id);
 
-    client.nome = nome;
+  const updated = this.clientRepository.merge(client, dto);
 
-    return await this.clientRepository.save(client);
-  }
+  return this.clientRepository.save(updated);
+}
 
   async remove(id: number) {
     const client = await this.findOne(id);
