@@ -1,20 +1,21 @@
-import { IsString, IsDateString, IsOptional, IsInt } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, IsOptional, IsInt } from 'class-validator';
 
 export class CreateDemandDto {
-
   @IsString()
-  description: string; // descrição da demanda
+  @IsNotEmpty()
+  description: string;
 
   @IsDateString()
-  createdAt: string; // data de cadastro
+  @IsNotEmpty()
+  createdAt: string;
 
-  @IsOptional()
   @IsDateString()
-  dueDate?: string; // data de vencimento
+  @IsNotEmpty()
+  dueDate: string;
 
   @IsInt()
-  userId: number; // ID do usuário responsável pela demanda
+  @IsOptional() // cliente pode não enviar; admin envia
+  userId?: number;
 
-  @IsInt()
-  clientId: number; // ID do cliente ao qual a demanda pertence
+  // clientId REMOVIDO
 }

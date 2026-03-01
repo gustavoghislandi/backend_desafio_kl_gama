@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from 'typeorm';
 import { UserEntity } from '../../users/entities/user.entity';
 import { DemandEntity } from '../../demands/entities/demand.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('clients')
 export class ClientEntity {
@@ -13,7 +14,8 @@ export class ClientEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Exclude() // Não retorna nas queries normais
+  @Column({ select: false }) // dupla garantia de não retornar nas queries normais, precisa ser explícito.
   password: string;
 
   @Column({ default: true })

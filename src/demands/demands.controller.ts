@@ -1,40 +1,42 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards, Req, NotFoundException } from '@nestjs/common';
 import { DemandsService } from './demands.service';
 import { CreateDemandDto } from './dto/create-demand.dto';
 import { UpdateDemandDto } from './dto/update-demand.dto';
+import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
+import { Request } from 'express';
 
 @Controller('demands')
+@UseGuards(JwtAuthGuard) // aplica proteção JWT
 export class DemandsController {
-
   constructor(private readonly demandsService: DemandsService) {}
 
-  // cria uma nova demanda
   @Post()
-  create(@Body() dto: CreateDemandDto) {
-    return this.demandsService.create(dto);
+  create(@Body() dto: CreateDemandDto, @Req() req: Request) {
+    const clientId = req['client'].id;
+    return this.demandsService.create(dto, clientId);
   }
 
-  // lista todas as demandas
   @Get()
-  findAll() {
-    return this.demandsService.findAll();
+  findAll(@Req() req: Request) {
+    const clientId = req['client'].id;
+    return this.demandsService.findAllByClient(clientId);
   }
 
-  // busca uma demanda pelo ID
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.demandsService.findOne(Number(id));
+  findOne(@Param('id') id: string, @Req() req: Request) {
+    const clientId = req['client'].id;
+    return this.demandsService.findOneByClient(Number(id), clientId);
   }
 
-  // atualiza uma demanda
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateDemandDto) {
-    return this.demandsService.update(Number(id), dto);
+  update(@Param('id') id: string, @Body() dto: UpdateDemandDto, @Req() req: Request) {
+    const clientId = req['client'].id;
+    return this.demandsService.updateByClient(Number(id), dto, clientId);
   }
 
-  // remove uma demanda
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.demandsService.remove(Number(id));
+  remove(@Param('id') id: string, @Req() req: Request) {
+    const clientId = req['client'].id;
+    return this.demandsService.removeByClient(Number(id), clientId);
   }
 }
