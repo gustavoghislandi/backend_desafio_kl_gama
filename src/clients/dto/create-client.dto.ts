@@ -1,12 +1,17 @@
-import { IsString, IsBoolean, IsOptional, MaxLength } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsBoolean, MinLength } from 'class-validator';
 
 export class CreateClientDto {
+  @IsString()
+  name: string;
+
+  @IsEmail()
+  email: string;
 
   @IsString()
-  @MaxLength(150)
-  name: string; // nome do cliente
+  @MinLength(6)
+  password: string;
 
   @IsOptional()
   @IsBoolean()
-  active?: boolean; // indica se está ativo
+  active?: boolean;
 }

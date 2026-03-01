@@ -4,15 +4,21 @@ import { DemandEntity } from '../../demands/entities/demand.entity';
 
 @Entity('clients')
 export class ClientEntity {
-
   @PrimaryGeneratedColumn()
-  id: number; // ID do cliente
+  id: number;
 
   @Column({ length: 150 })
-  name: string; // nome do cliente
+  name: string;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  password: string;
 
   @Column({ default: true })
-  active: boolean; // indica se está ativo
+  active: boolean;
+
 
   // Usuários que podem gerenciar este cliente
   @ManyToMany(() => UserEntity, user => user.clients)
