@@ -1,0 +1,97 @@
+{
+  "info": {
+    "name": "Desafio API Node.js",
+    "_postman_id": "d1a5f2c2-1234-5678-9012-abcdefabcdef",
+    "description": "Rotas padrão para Clients, Users e Demands",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "Create Client",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cliente Exemplo\",\n  \"active\": true\n}"
+            },
+            "url": { "raw": "http://localhost:3000/clients", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["clients"] }
+          }
+        },
+        { "name": "Get All Clients", "request": { "method": "GET", "url": { "raw": "http://localhost:3000/clients", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["clients"] } } },
+        { "name": "Get Client By ID", "request": { "method": "GET", "url": { "raw": "http://localhost:3000/clients/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["clients", "1"] } } },
+        {
+          "name": "Update Client",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Cliente Atualizado\",\n  \"active\": false\n}" },
+            "url": { "raw": "http://localhost:3000/clients/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["clients", "1"] }
+          }
+        },
+        { "name": "Delete Client", "request": { "method": "DELETE", "url": { "raw": "http://localhost:3000/clients/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["clients", "1"] } } }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Usuário Exemplo\",\n  \"email\": \"usuario@exemplo.com\",\n  \"password\": \"senha123\",\n  \"active\": true,\n  \"isManager\": false\n}"
+            },
+            "url": { "raw": "http://localhost:3000/users", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users"] }
+          }
+        },
+        { "name": "Get All Users", "request": { "method": "GET", "url": { "raw": "http://localhost:3000/users", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users"] } } },
+        { "name": "Get User By ID", "request": { "method": "GET", "url": { "raw": "http://localhost:3000/users/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users", "1"] } } },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Usuário Atualizado\",\n  \"active\": false\n}" },
+            "url": { "raw": "http://localhost:3000/users/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users", "1"] }
+          }
+        },
+        { "name": "Delete User", "request": { "method": "DELETE", "url": { "raw": "http://localhost:3000/users/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users", "1"] } } }
+      ]
+    },
+    {
+      "name": "Demands",
+      "item": [
+        {
+          "name": "Create Demand",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Nova demanda\",\n  \"createdAt\": \"2026-03-01T00:00:00.000Z\",\n  \"dueDate\": \"2026-03-10T00:00:00.000Z\",\n  \"userId\": 1,\n  \"clientId\": 1\n}"
+            },
+            "url": { "raw": "http://localhost:3000/demands", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["demands"] }
+          }
+        },
+        { "name": "Get All Demands", "request": { "method": "GET", "url": { "raw": "http://localhost:3000/demands", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["demands"] } } },
+        { "name": "Get Demand By ID", "request": { "method": "GET", "url": { "raw": "http://localhost:3000/demands/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["demands", "1"] } } },
+        {
+          "name": "Update Demand",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"description\": \"Demanda Atualizada\",\n  \"dueDate\": \"2026-03-15T00:00:00.000Z\"\n}" },
+            "url": { "raw": "http://localhost:3000/demands/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["demands", "1"] }
+          }
+        },
+        { "name": "Delete Demand", "request": { "method": "DELETE", "url": { "raw": "http://localhost:3000/demands/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["demands", "1"] } } }
+      ]
+    }
+  ]
+}
