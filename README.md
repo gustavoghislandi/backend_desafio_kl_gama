@@ -1,5 +1,6 @@
   - Escolhi usar o método 'remove' que é mais caro, mas garante integridade de dados (principalmente quando aumentar a complexidade do código), regras de négocio, etc. Se não houver necessidade, usar 'delete', que tem melhor performance.
 
+Teste.Teste.
 
 
 <p align="center">
